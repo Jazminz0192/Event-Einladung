@@ -6,64 +6,217 @@
   <title>EventFlow - Dein Event Planer</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: linear-gradient(135deg,#eef2ff,#fdf2f8);
       padding: 30px;
+      color: #222;
+      transition: 0.3s ease;
+    }
+
+    body.dark {
+      background: linear-gradient(135deg,#0f172a,#1e1b4b);
+      color: #f8fafc;
     }
 
     h1 {
-      text-align:center;
-      color:#4f46e5;
+      text-align: center;
+      color: #4f46e5;
+      margin-bottom: 25px;
+    }
+
+    body.dark h1 {
+      color: #c4b5fd;
     }
 
     .container {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
-      max-width:1000px;
-      margin:auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
     }
 
     .card {
-      background:white;
-      padding:20px;
-      border-radius:15px;
+      background: white;
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: 0.3s ease;
+    }
+
+    body.dark .card {
+      background: #1e293b;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    h2 {
+      margin-top: 0;
     }
 
     input, textarea {
-      width:100%;
-      margin-top:10px;
-      padding:10px;
-      border-radius:10px;
-      border:1px solid #ccc;
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      outline: none;
+    }
+
+    body.dark input,
+    body.dark textarea {
+      background: #0f172a;
+      color: white;
+      border: 1px solid #475569;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
     }
 
     button {
-      margin-top:10px;
-      padding:10px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
+      margin-top: 10px;
+      padding: 11px 14px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
     }
 
-    .primary { background:#4f46e5; color:white; }
-    .secondary { background:#eef2ff; color:#4f46e5; }
-    .color { background:#fef3c7; }
-    .danger { background:#fee2e2; }
+    .primary {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .secondary {
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    .color {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      align-items: center;
+    }
 
     .event-output {
       background: linear-gradient(135deg,#4f46e5,#9333ea);
-      color:white;
-      padding:20px;
-      border-radius:15px;
+      color: white;
+      padding: 22px;
+      border-radius: 18px;
+      min-height: 330px;
+      transition: 0.3s ease;
+    }
+
+    .event-output h3 {
+      font-size: 28px;
+      margin-top: 0;
+      margin-bottom: 15px;
     }
 
     .info-box {
-      background:rgba(255,255,255,0.2);
-      padding:10px;
-      border-radius:10px;
-      margin-top:10px;
+      background: rgba(255,255,255,0.2);
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #fef3c7;
+    }
+
+    .map-link {
+      color: white;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      background: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 12px;
+    }
+
+    body.dark .toggle-row {
+      background: #0f172a;
+      color: #f8fafc;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 56px;
+      height: 30px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: #cbd5e1;
+      border-radius: 999px;
+      transition: 0.3s;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      top: 4px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .switch input:checked + .slider {
+      background: #4f46e5;
+    }
+
+    .switch input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    @media (max-width: 800px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 18px;
+      }
     }
   </style>
 </head>
@@ -77,22 +230,34 @@
   <div class="card">
     <h2>Daten eingeben</h2>
 
-    <input id="title" placeholder="Titel"/>
+    <input id="title" placeholder="Titel, z. B. Padel spielen"/>
     <input id="date" type="date"/>
     <input id="time" type="time"/>
-    <input id="location" placeholder="Ort"/>
+    <input id="location" placeholder="Ort / Adresse"/>
     <input id="people" placeholder="Teilnehmer"/>
-    <textarea id="notes" placeholder="Infos"></textarea>
+    <textarea id="notes" placeholder="Weitere Infos"></textarea>
 
-    <button class="primary" onclick="generate()">Erstellen</button>
-    <button class="secondary" onclick="copyPretty()">Copy Summary</button>
-    <button class="color" onclick="changeColor()">Farbe ändern</button>
-    <button class="danger" onclick="reset()">Reset</button>
+    <div class="buttons">
+      <button class="primary" onclick="generate()">Erstellen</button>
+      <button class="secondary" onclick="copyPretty()">Copy Summary</button>
+      <button class="color" onclick="changeColor()">Farbe ändern</button>
+      <button class="danger" onclick="resetForm()">Reset</button>
+
+      <div class="toggle-row">
+        <span>Dark Mode</span>
+        <label class="switch">
+          <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
   </div>
 
   <div class="card">
     <h2>Vorschau</h2>
-    <div id="output" class="event-output">Noch nichts erstellt</div>
+    <div id="output" class="event-output">
+      Noch nichts erstellt
+    </div>
   </div>
 
 </div>
@@ -100,7 +265,13 @@
 <script>
 function formatDate(d){
   if(!d) return "-";
-  return new Date(d).toLocaleDateString("de-DE",{weekday:"long", day:"2-digit", month:"long"});
+
+  return new Date(d).toLocaleDateString("de-DE", {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
 }
 
 function generate(){
@@ -111,28 +282,36 @@ function generate(){
   const people = document.getElementById("people").value || "-";
   const notes = document.getElementById("notes").value || "-";
 
+  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+
   document.getElementById("output").innerHTML = `
     <h3>${title}</h3>
 
     <div class="info-box">
-      <strong>Datum</strong><br>${date}
+      <strong>Datum</strong>
+      ${date}
     </div>
 
     <div class="info-box">
-      <strong>Uhrzeit</strong><br>${time}
+      <strong>Uhrzeit</strong>
+      ${time} Uhr
     </div>
 
     <div class="info-box">
-      <strong>Ort</strong><br>${location}
+      <strong>Standort</strong>
+      ${location}<br>
+      <a class="map-link" href="${mapsUrl}" target="_blank">In Google Maps öffnen</a>
     </div>
 
     <div class="info-box">
-      <strong>Teilnehmer</strong><br>${people}
+      <strong>Teilnehmer</strong>
+      ${people}
     </div>
 
     <div class="info-box">
-      <strong>Zusammenfassung</strong><br>
-      Am ${date} findet „${title}“ statt. Beginn: ${time}. Ort: ${location}. Wichtig: ${notes}
+      <strong>Zusammenfassung</strong>
+      Am ${date} findet „${title}“ statt. Beginn ist um ${time} Uhr. 
+      Der Treffpunkt ist ${location}. Wichtig: ${notes}
     </div>
   `;
 }
@@ -145,6 +324,8 @@ function copyPretty(){
   const people = document.getElementById("people").value || "-";
   const notes = document.getElementById("notes").value || "-";
 
+  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+
   const text = `✨ EVENT ✨
 
 📌 Titel: ${title}
@@ -155,6 +336,9 @@ function copyPretty(){
 📍 Ort:
 ${location}
 
+🗺️ Google Maps:
+${mapsUrl}
+
 👥 Teilnehmer:
 ${people}
 
@@ -163,7 +347,7 @@ ${notes}`;
 
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text)
-      .then(() => alert("Kopiert!"))
+      .then(() => alert("Zusammenfassung wurde kopiert!"))
       .catch(() => fallbackCopy(text));
   } else {
     fallbackCopy(text);
@@ -173,14 +357,19 @@ ${notes}`;
 function fallbackCopy(text){
   const textarea = document.createElement("textarea");
   textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "-9999px";
+
   document.body.appendChild(textarea);
+  textarea.focus();
   textarea.select();
 
   try {
     document.execCommand("copy");
-    alert("Kopiert!");
+    alert("Zusammenfassung wurde kopiert!");
   } catch {
-    alert("Fehler beim Kopieren");
+    alert("Kopieren hat leider nicht funktioniert.");
   }
 
   document.body.removeChild(textarea);
@@ -188,23 +377,29 @@ function fallbackCopy(text){
 
 function changeColor(){
   const output = document.getElementById("output");
+
   const colors = [
     "linear-gradient(135deg,#4f46e5,#9333ea)",
     "linear-gradient(135deg,#0f766e,#14b8a6)",
     "linear-gradient(135deg,#be123c,#f43f5e)",
-    "linear-gradient(135deg,#92400e,#f59e0b)"
+    "linear-gradient(135deg,#92400e,#f59e0b)",
+    "linear-gradient(135deg,#1e3a8a,#2563eb)"
   ];
 
   let i = Number(output.dataset.i || 0);
-  i = (i+1) % colors.length;
+  i = (i + 1) % colors.length;
 
   output.style.background = colors[i];
   output.dataset.i = i;
 }
 
-function reset(){
-  document.querySelectorAll("input, textarea").forEach(e=>e.value="");
-  document.getElementById("output").innerHTML="Noch nichts erstellt";
+function toggleDarkMode(){
+  document.body.classList.toggle("dark");
+}
+
+function resetForm(){
+  document.querySelectorAll("input, textarea").forEach(e => e.value = "");
+  document.getElementById("output").innerHTML = "Noch nichts erstellt";
 }
 </script>
 
