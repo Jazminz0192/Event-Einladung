@@ -12,14 +12,15 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg,#eef2ff,#fdf2f8);
+      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
       padding: 30px;
       color: #222;
       transition: 0.3s ease;
+      margin: 0;
     }
 
     body.dark {
-      background: linear-gradient(135deg,#0f172a,#1e1b4b);
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
       color: #f8fafc;
     }
 
@@ -37,7 +38,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
     }
 
@@ -56,6 +57,7 @@
 
     h2 {
       margin-top: 0;
+      margin-bottom: 16px;
     }
 
     input, textarea {
@@ -66,6 +68,12 @@
       border: 1px solid #ccc;
       font-size: 15px;
       outline: none;
+      transition: 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     }
 
     body.dark input,
@@ -76,18 +84,30 @@
     }
 
     textarea {
-      min-height: 90px;
+      min-height: 95px;
       resize: vertical;
     }
 
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
     button {
-      margin-top: 10px;
       padding: 11px 14px;
       border: none;
       border-radius: 12px;
       cursor: pointer;
       font-weight: bold;
       font-size: 14px;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
     }
 
     .primary {
@@ -100,6 +120,16 @@
       color: #4f46e5;
     }
 
+    .share-btn {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .png-btn {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
     .color {
       background: #fef3c7;
       color: #92400e;
@@ -110,58 +140,14 @@
       color: #b91c1c;
     }
 
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-      align-items: center;
-    }
-
-    .event-output {
-      background: linear-gradient(135deg,#4f46e5,#9333ea);
-      color: white;
-      padding: 22px;
-      border-radius: 18px;
-      min-height: 330px;
-      transition: 0.3s ease;
-    }
-
-    .event-output h3 {
-      font-size: 28px;
-      margin-top: 0;
-      margin-bottom: 15px;
-    }
-
-    .info-box {
-      background: rgba(255,255,255,0.2);
-      padding: 12px;
-      border-radius: 12px;
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-
-    .info-box strong {
-      display: block;
-      margin-bottom: 4px;
-      color: #fef3c7;
-    }
-
-    .map-link {
-      color: white;
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
     .toggle-row {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      margin-top: 10px;
-      font-weight: bold;
       background: #f8fafc;
       padding: 8px 12px;
       border-radius: 12px;
+      font-weight: bold;
     }
 
     body.dark .toggle-row {
@@ -209,7 +195,63 @@
       transform: translateX(26px);
     }
 
-    @media (max-width: 800px) {
+    .preview-wrapper {
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .event-output {
+      background: linear-gradient(135deg, #4f46e5, #9333ea);
+      color: white;
+      padding: 24px;
+      border-radius: 18px;
+      min-height: 360px;
+      transition: 0.3s ease;
+    }
+
+    .event-output h3 {
+      font-size: 30px;
+      margin-top: 0;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+
+    .preview-subtitle {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .info-box {
+      background: rgba(255,255,255,0.18);
+      padding: 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #fef3c7;
+    }
+
+    .map-link {
+      color: white;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    .empty-text {
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
       .container {
         grid-template-columns: 1fr;
       }
@@ -220,188 +262,260 @@
     }
   </style>
 </head>
-
 <body>
 
-<h1>EventFlow – Dein schöner Event Planer</h1>
+  <h1>EventFlow – Dein schöner Event Planer</h1>
 
-<div class="container">
+  <div class="container">
+    <div class="card">
+      <h2>Daten eingeben</h2>
 
-  <div class="card">
-    <h2>Daten eingeben</h2>
+      <input id="title" placeholder="Titel, z. B. Padel spielen" />
+      <input id="date" type="date" />
+      <input id="time" type="time" />
+      <input id="location" placeholder="Ort / Adresse" />
+      <input id="people" placeholder="Teilnehmer" />
+      <textarea id="notes" placeholder="Weitere Infos"></textarea>
 
-    <input id="title" placeholder="Titel, z. B. Padel spielen"/>
-    <input id="date" type="date"/>
-    <input id="time" type="time"/>
-    <input id="location" placeholder="Ort / Adresse"/>
-    <input id="people" placeholder="Teilnehmer"/>
-    <textarea id="notes" placeholder="Weitere Infos"></textarea>
+      <div class="buttons">
+        <button class="primary" onclick="generate()">Erstellen</button>
+        <button class="secondary" onclick="copyPretty()">Copy Summary</button>
+        <button class="png-btn" onclick="downloadPNG()">PNG herunterladen</button>
+        <button class="share-btn" onclick="sharePNG()">Bild teilen</button>
+        <button class="color" onclick="changeColor()">Farbe ändern</button>
+        <button class="danger" onclick="resetForm()">Reset</button>
 
-    <div class="buttons">
-      <button class="primary" onclick="generate()">Erstellen</button>
-      <button class="secondary" onclick="copyPretty()">Copy Summary</button>
-      <button class="color" onclick="changeColor()">Farbe ändern</button>
-      <button class="danger" onclick="resetForm()">Reset</button>
+        <div class="toggle-row">
+          <span>Dark Mode</span>
+          <label class="switch">
+            <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
 
-      <div class="toggle-row">
-        <span>Dark Mode</span>
-        <label class="switch">
-          <input type="checkbox" id="darkToggle" onchange="toggleDarkMode()">
-          <span class="slider"></span>
-        </label>
+    <div class="card">
+      <h2>Vorschau</h2>
+      <div class="preview-wrapper">
+        <div id="output" class="event-output">
+          <p class="empty-text">
+            Fülle links die Daten aus und klicke auf „Erstellen“.<br>
+            Danach erscheint hier deine schöne Event-Zusammenfassung.
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card">
-    <h2>Vorschau</h2>
-    <div id="output" class="event-output">
-      Noch nichts erstellt
-    </div>
-  </div>
+  <!-- html2canvas für PNG-Erstellung -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
-</div>
+  <script>
+    function formatDate(d) {
+      if (!d) return "-";
 
-<script>
-function formatDate(d){
-  if(!d) return "-";
+      return new Date(d).toLocaleDateString("de-DE", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      });
+    }
 
-  return new Date(d).toLocaleDateString("de-DE", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-    year: "numeric"
-  });
-}
+    function getEventData() {
+      const title = document.getElementById("title").value.trim() || "Event";
+      const date = formatDate(document.getElementById("date").value);
+      const time = document.getElementById("time").value || "-";
+      const location = document.getElementById("location").value.trim() || "-";
+      const people = document.getElementById("people").value.trim() || "-";
+      const notes = document.getElementById("notes").value.trim() || "-";
+      const hasRealLocation = location !== "-";
+      const mapsUrl = hasRealLocation
+        ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location)
+        : "";
 
-function generate(){
-  const title = document.getElementById("title").value || "Event";
-  const date = formatDate(document.getElementById("date").value);
-  const time = document.getElementById("time").value || "-";
-  const location = document.getElementById("location").value || "-";
-  const people = document.getElementById("people").value || "-";
-  const notes = document.getElementById("notes").value || "-";
+      return { title, date, time, location, people, notes, mapsUrl, hasRealLocation };
+    }
 
-  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+    function generate() {
+      const { title, date, time, location, people, notes, mapsUrl, hasRealLocation } = getEventData();
 
-  document.getElementById("output").innerHTML = `
-    <h3>${title}</h3>
+      document.getElementById("output").innerHTML = `
+        <span class="preview-subtitle">Event Summary</span>
+        <h3>${title}</h3>
 
-    <div class="info-box">
-      <strong>Datum</strong>
-      ${date}
-    </div>
+        <div class="info-box">
+          <strong>Datum</strong>
+          ${date}
+        </div>
 
-    <div class="info-box">
-      <strong>Uhrzeit</strong>
-      ${time} Uhr
-    </div>
+        <div class="info-box">
+          <strong>Uhrzeit</strong>
+          ${time}${time !== "-" ? " Uhr" : ""}
+        </div>
 
-    <div class="info-box">
-      <strong>Standort</strong>
-      ${location}<br>
-      <a class="map-link" href="${mapsUrl}" target="_blank">In Google Maps öffnen</a>
-    </div>
+        <div class="info-box">
+          <strong>Standort</strong>
+          ${location}
+          ${hasRealLocation ? `<br><a class="map-link" href="${mapsUrl}" target="_blank">In Google Maps öffnen</a>` : ""}
+        </div>
 
-    <div class="info-box">
-      <strong>Teilnehmer</strong>
-      ${people}
-    </div>
+        <div class="info-box">
+          <strong>Teilnehmer</strong>
+          ${people}
+        </div>
 
-    <div class="info-box">
-      <strong>Zusammenfassung</strong>
-      Am ${date} findet „${title}“ statt. Beginn ist um ${time} Uhr. 
-      Der Treffpunkt ist ${location}. Wichtig: ${notes}
-    </div>
-  `;
-}
+        <div class="info-box">
+          <strong>Zusammenfassung</strong>
+          Am ${date} findet „${title}“ statt. 
+          Beginn ist um ${time}${time !== "-" ? " Uhr" : ""}. 
+          Der Treffpunkt ist ${location}. 
+          Wichtig: ${notes}
+        </div>
+      `;
+    }
 
-function copyPretty(){
-  const title = document.getElementById("title").value || "Event";
-  const date = formatDate(document.getElementById("date").value);
-  const time = document.getElementById("time").value || "-";
-  const location = document.getElementById("location").value || "-";
-  const people = document.getElementById("people").value || "-";
-  const notes = document.getElementById("notes").value || "-";
+    function buildCopyText() {
+      const { title, date, time, location, people, notes, mapsUrl, hasRealLocation } = getEventData();
 
-  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
-
-  const text = `✨ EVENT ✨
+      return `✨ EVENT ✨
 
 📌 Titel: ${title}
 
 📅 Datum: ${date}
-⏰ Uhrzeit: ${time}
+⏰ Uhrzeit: ${time}${time !== "-" ? "" : ""}
 
 📍 Ort:
 ${location}
 
-🗺️ Google Maps:
+${hasRealLocation ? `🗺️ Google Maps:
 ${mapsUrl}
 
-👥 Teilnehmer:
+` : ""}👥 Teilnehmer:
 ${people}
 
 📝 Infos:
 ${notes}`;
+    }
 
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text)
-      .then(() => alert("Zusammenfassung wurde kopiert!"))
-      .catch(() => fallbackCopy(text));
-  } else {
-    fallbackCopy(text);
-  }
-}
+    function copyPretty() {
+      const text = buildCopyText();
 
-function fallbackCopy(text){
-  const textarea = document.createElement("textarea");
-  textarea.value = text;
-  textarea.style.position = "fixed";
-  textarea.style.left = "-9999px";
-  textarea.style.top = "-9999px";
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text)
+          .then(() => alert("Zusammenfassung wurde kopiert!"))
+          .catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
 
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
+    function fallbackCopy(text) {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      textarea.style.top = "-9999px";
 
-  try {
-    document.execCommand("copy");
-    alert("Zusammenfassung wurde kopiert!");
-  } catch {
-    alert("Kopieren hat leider nicht funktioniert.");
-  }
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
 
-  document.body.removeChild(textarea);
-}
+      try {
+        document.execCommand("copy");
+        alert("Zusammenfassung wurde kopiert!");
+      } catch {
+        alert("Kopieren hat leider nicht funktioniert.");
+      }
 
-function changeColor(){
-  const output = document.getElementById("output");
+      document.body.removeChild(textarea);
+    }
 
-  const colors = [
-    "linear-gradient(135deg,#4f46e5,#9333ea)",
-    "linear-gradient(135deg,#0f766e,#14b8a6)",
-    "linear-gradient(135deg,#be123c,#f43f5e)",
-    "linear-gradient(135deg,#92400e,#f59e0b)",
-    "linear-gradient(135deg,#1e3a8a,#2563eb)"
-  ];
+    function changeColor() {
+      const output = document.getElementById("output");
 
-  let i = Number(output.dataset.i || 0);
-  i = (i + 1) % colors.length;
+      const colors = [
+        "linear-gradient(135deg,#4f46e5,#9333ea)",
+        "linear-gradient(135deg,#0f766e,#14b8a6)",
+        "linear-gradient(135deg,#be123c,#f43f5e)",
+        "linear-gradient(135deg,#92400e,#f59e0b)",
+        "linear-gradient(135deg,#1e3a8a,#2563eb)"
+      ];
 
-  output.style.background = colors[i];
-  output.dataset.i = i;
-}
+      let i = Number(output.dataset.i || 0);
+      i = (i + 1) % colors.length;
 
-function toggleDarkMode(){
-  document.body.classList.toggle("dark");
-}
+      output.style.background = colors[i];
+      output.dataset.i = i;
+    }
 
-function resetForm(){
-  document.querySelectorAll("input, textarea").forEach(e => e.value = "");
-  document.getElementById("output").innerHTML = "Noch nichts erstellt";
-}
-</script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
 
+    function resetForm() {
+      document.querySelectorAll("input, textarea").forEach(e => e.value = "");
+      document.getElementById("output").innerHTML = `
+        <p class="empty-text">
+          Fülle links die Daten aus und klicke auf „Erstellen“.<br>
+          Danach erscheint hier deine schöne Event-Zusammenfassung.
+        </p>
+      `;
+    }
+
+    async function createCanvasFromOutput() {
+      const output = document.getElementById("output");
+
+      return await html2canvas(output, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: null
+      });
+    }
+
+    async function downloadPNG() {
+      try {
+        const canvas = await createCanvasFromOutput();
+        const link = document.createElement("a");
+        link.download = "event-summary.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      } catch (error) {
+        alert("PNG konnte leider nicht erstellt werden.");
+      }
+    }
+
+    async function sharePNG() {
+      try {
+        const canvas = await createCanvasFromOutput();
+
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            alert("Bild konnte nicht erstellt werden.");
+            return;
+          }
+
+          const file = new File([blob], "event-summary.png", { type: "image/png" });
+
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                files: [file],
+                title: "Event Summary",
+                text: "Hier ist meine Event-Zusammenfassung"
+              });
+            } catch (err) {
+              // User hat Share-Fenster evtl. geschlossen
+            }
+          } else {
+            alert("Bild teilen wird auf diesem Gerät/Browser nicht unterstützt. Du kannst das PNG aber herunterladen.");
+          }
+        }, "image/png");
+      } catch (error) {
+        alert("Bild konnte nicht geteilt werden.");
+      }
+    }
+  </script>
 </body>
 </html>
