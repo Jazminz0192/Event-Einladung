@@ -10,104 +10,182 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg-light: #f4f7ff;
+      --card-light: rgba(255, 255, 255, 0.85);
+      --text-light: #111827;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --soft-border: rgba(148, 163, 184, 0.25);
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #eef2ff, #fdf2f8);
-      padding: 30px;
-      color: #222;
-      transition: 0.3s ease;
       margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(99, 102, 241, 0.25), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.22), transparent 30%),
+        linear-gradient(135deg, #eef2ff, #fdf2f8);
+      color: var(--text-light);
+      padding: 28px;
+      transition: 0.3s ease;
     }
 
     body.dark {
-      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      background:
+        radial-gradient(circle at top left, rgba(99, 102, 241, 0.22), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.18), transparent 30%),
+        linear-gradient(135deg, #020617, #111827);
       color: #f8fafc;
     }
 
-    h1 {
+    .app-header {
+      max-width: 1120px;
+      margin: 0 auto 24px auto;
       text-align: center;
-      color: #4f46e5;
-      margin-bottom: 25px;
     }
 
-    body.dark h1 {
+    .badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.12);
+      color: #4f46e5;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    body.dark .badge {
+      background: rgba(196, 181, 253, 0.14);
       color: #c4b5fd;
     }
 
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 52px);
+      color: #312e81;
+      letter-spacing: -1px;
+    }
+
+    body.dark h1 {
+      color: #e0e7ff;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: #64748b;
+      font-size: 17px;
+    }
+
+    body.dark .subtitle {
+      color: #cbd5e1;
+    }
+
     .container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      max-width: 1100px;
+      max-width: 1120px;
       margin: auto;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 22px;
+      align-items: start;
     }
 
     .card {
-      background: white;
-      padding: 22px;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      background: var(--card-light);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--soft-border);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 18px 55px rgba(15, 23, 42, 0.10);
       transition: 0.3s ease;
     }
 
     body.dark .card {
-      background: #1e293b;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      background: rgba(15, 23, 42, 0.82);
+      border-color: rgba(148, 163, 184, 0.18);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
     }
 
     h2 {
-      margin-top: 0;
-      margin-bottom: 16px;
+      margin: 0 0 16px 0;
+      font-size: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    body.dark .field label {
+      color: #e2e8f0;
     }
 
     input, textarea {
       width: 100%;
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid #ccc;
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid #d1d5db;
       font-size: 15px;
       outline: none;
-      transition: 0.3s ease;
+      background: white;
+      color: #111827;
+      transition: 0.2s ease;
     }
 
     input:focus, textarea:focus {
-      border-color: #4f46e5;
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
     }
 
     body.dark input,
     body.dark textarea {
-      background: #0f172a;
+      background: #020617;
       color: white;
-      border: 1px solid #475569;
+      border-color: #334155;
     }
 
     textarea {
-      min-height: 95px;
+      min-height: 100px;
       resize: vertical;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
     .buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
+      gap: 9px;
+      margin-top: 16px;
       align-items: center;
     }
 
     button {
-      padding: 11px 14px;
       border: none;
-      border-radius: 12px;
+      border-radius: 15px;
+      padding: 12px 15px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 800;
       font-size: 14px;
       transition: 0.2s ease;
     }
 
     button:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      filter: brightness(0.98);
     }
 
     .primary {
@@ -125,12 +203,12 @@
       color: #166534;
     }
 
-    .png-btn {
-      background: #e0f2fe;
-      color: #075985;
+    .calendar-btn {
+      background: #ede9fe;
+      color: #5b21b6;
     }
 
-    .color {
+    .color-btn {
       background: #fef3c7;
       color: #92400e;
     }
@@ -146,19 +224,20 @@
       gap: 10px;
       background: #f8fafc;
       padding: 8px 12px;
-      border-radius: 12px;
-      font-weight: bold;
+      border-radius: 15px;
+      font-weight: 800;
+      font-size: 14px;
     }
 
     body.dark .toggle-row {
-      background: #0f172a;
+      background: #020617;
       color: #f8fafc;
     }
 
     .switch {
       position: relative;
       display: inline-block;
-      width: 56px;
+      width: 54px;
       height: 30px;
     }
 
@@ -168,8 +247,8 @@
 
     .slider {
       position: absolute;
-      cursor: pointer;
       inset: 0;
+      cursor: pointer;
       background: #cbd5e1;
       border-radius: 999px;
       transition: 0.3s;
@@ -178,8 +257,8 @@
     .slider:before {
       content: "";
       position: absolute;
-      height: 22px;
       width: 22px;
+      height: 22px;
       left: 4px;
       top: 4px;
       background: white;
@@ -192,97 +271,225 @@
     }
 
     .switch input:checked + .slider:before {
-      transform: translateX(26px);
+      transform: translateX(24px);
     }
 
-    .preview-wrapper {
+    .preview-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .countdown-box {
+      background: linear-gradient(135deg, #111827, #312e81);
+      color: white;
+      padding: 12px 14px;
       border-radius: 18px;
-      overflow: hidden;
+      min-width: 170px;
+      text-align: center;
+      box-shadow: 0 12px 25px rgba(49, 46, 129, 0.22);
+    }
+
+    .countdown-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    .countdown-value {
+      font-size: 17px;
+      font-weight: 900;
     }
 
     .event-output {
       background: linear-gradient(135deg, #4f46e5, #9333ea);
       color: white;
-      padding: 24px;
-      border-radius: 18px;
-      min-height: 360px;
+      padding: 26px;
+      border-radius: 26px;
+      min-height: 390px;
       transition: 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .event-output:before {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      top: -110px;
+      right: -90px;
+    }
+
+    .event-output > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .preview-pill {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      padding: 7px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 12px;
     }
 
     .event-output h3 {
-      font-size: 30px;
-      margin-top: 0;
-      margin-bottom: 15px;
-      line-height: 1.2;
+      margin: 0 0 16px 0;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
     }
 
-    .preview-subtitle {
-      display: inline-block;
-      background: rgba(255,255,255,0.18);
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 13px;
-      margin-bottom: 12px;
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     .info-box {
       background: rgba(255,255,255,0.18);
-      padding: 12px;
-      border-radius: 12px;
-      margin-top: 10px;
-      line-height: 1.5;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 13px;
+      border-radius: 16px;
+      line-height: 1.45;
       word-break: break-word;
+    }
+
+    .info-box.full {
+      grid-column: 1 / -1;
     }
 
     .info-box strong {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       color: #fef3c7;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .map-link {
       color: white;
-      font-weight: bold;
+      font-weight: 900;
       text-decoration: underline;
     }
 
     .empty-text {
       opacity: 0.9;
-      line-height: 1.6;
+      line-height: 1.7;
+      font-size: 16px;
     }
 
-    @media (max-width: 900px) {
+    .hint {
+      margin-top: 14px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    body.dark .hint {
+      color: #cbd5e1;
+    }
+
+    @media (max-width: 920px) {
       .container {
         grid-template-columns: 1fr;
       }
 
+      .preview-top {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .countdown-box {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 560px) {
       body {
-        padding: 18px;
+        padding: 16px;
+      }
+
+      .two-cols,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .event-output h3 {
+        font-size: 28px;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .toggle-row {
+        width: 100%;
+        justify-content: space-between;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1>EventFlow – Dein schöner Event Planer</h1>
+  <header class="app-header">
+    <div class="badge">Smart Event Summary</div>
+    <h1>EventFlow</h1>
+    <p class="subtitle">Erstelle schöne Event-Zusammenfassungen, teile sie als Text oder Bild und exportiere sie direkt in deinen Kalender.</p>
+  </header>
 
-  <div class="container">
-    <div class="card">
-      <h2>Daten eingeben</h2>
+  <main class="container">
+    <section class="card">
+      <h2>Event-Daten eingeben</h2>
 
-      <input id="title" placeholder="Titel, z. B. Padel spielen" />
-      <input id="date" type="date" />
-      <input id="time" type="time" />
-      <input id="location" placeholder="Ort / Adresse" />
-      <input id="people" placeholder="Teilnehmer" />
-      <textarea id="notes" placeholder="Weitere Infos"></textarea>
+      <div class="form-grid">
+        <div class="field">
+          <label for="title">Titel</label>
+          <input id="title" placeholder="z. B. Padel spielen" />
+        </div>
+
+        <div class="two-cols">
+          <div class="field">
+            <label for="date">Datum</label>
+            <input id="date" type="date" />
+          </div>
+
+          <div class="field">
+            <label for="time">Uhrzeit</label>
+            <input id="time" type="time" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="location">Standort / Adresse</label>
+          <input id="location" placeholder="z. B. Padel Arena Hannover" />
+        </div>
+
+        <div class="field">
+          <label for="people">Teilnehmer</label>
+          <input id="people" placeholder="z. B. Ali, Max, Sarah" />
+        </div>
+
+        <div class="field">
+          <label for="notes">Weitere Infos</label>
+          <textarea id="notes" placeholder="z. B. Sportsachen und Wasser mitbringen"></textarea>
+        </div>
+      </div>
 
       <div class="buttons">
         <button class="primary" onclick="generate()">Erstellen</button>
         <button class="secondary" onclick="copyPretty()">Copy Summary</button>
-        <button class="png-btn" onclick="downloadPNG()">PNG herunterladen</button>
+        <button class="calendar-btn" onclick="exportCalendar()">Kalender Export</button>
         <button class="share-btn" onclick="sharePNG()">Bild teilen</button>
-        <button class="color" onclick="changeColor()">Farbe ändern</button>
+        <button class="color-btn" onclick="changeColor()">Farbe ändern</button>
         <button class="danger" onclick="resetForm()">Reset</button>
 
         <div class="toggle-row">
@@ -293,29 +500,40 @@
           </label>
         </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h2>Vorschau</h2>
-      <div class="preview-wrapper">
-        <div id="output" class="event-output">
-          <p class="empty-text">
-            Fülle links die Daten aus und klicke auf „Erstellen“.<br>
-            Danach erscheint hier deine schöne Event-Zusammenfassung.
-          </p>
+      <p class="hint">
+        Tipp: Der Kalender-Export erstellt eine .ics-Datei. Diese kannst du öffnen und zu Google Kalender, Apple Kalender oder Outlook hinzufügen.
+      </p>
+    </section>
+
+    <section class="card">
+      <div class="preview-top">
+        <h2>Vorschau</h2>
+
+        <div class="countdown-box">
+          <div class="countdown-label">Countdown</div>
+          <div id="countdown" class="countdown-value">Noch kein Datum</div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- html2canvas für PNG-Erstellung -->
+      <div id="output" class="event-output">
+        <p class="empty-text">
+          Fülle links die Daten aus und klicke auf „Erstellen“.<br>
+          Danach erscheint hier deine schöne Event-Zusammenfassung.
+        </p>
+      </div>
+    </section>
+  </main>
+
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
   <script>
+    let countdownInterval = null;
+
     function formatDate(d) {
       if (!d) return "-";
 
-      return new Date(d).toLocaleDateString("de-DE", {
+      return new Date(d + "T00:00:00").toLocaleDateString("de-DE", {
         weekday: "long",
         day: "2-digit",
         month: "long",
@@ -325,78 +543,146 @@
 
     function getEventData() {
       const title = document.getElementById("title").value.trim() || "Event";
-      const date = formatDate(document.getElementById("date").value);
-      const time = document.getElementById("time").value || "-";
+      const rawDate = document.getElementById("date").value;
+      const rawTime = document.getElementById("time").value;
+      const date = formatDate(rawDate);
+      const time = rawTime || "-";
       const location = document.getElementById("location").value.trim() || "-";
       const people = document.getElementById("people").value.trim() || "-";
       const notes = document.getElementById("notes").value.trim() || "-";
+
       const hasRealLocation = location !== "-";
       const mapsUrl = hasRealLocation
         ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location)
         : "";
 
-      return { title, date, time, location, people, notes, mapsUrl, hasRealLocation };
+      return {
+        title,
+        rawDate,
+        rawTime,
+        date,
+        time,
+        location,
+        people,
+        notes,
+        mapsUrl,
+        hasRealLocation
+      };
     }
 
     function generate() {
-      const { title, date, time, location, people, notes, mapsUrl, hasRealLocation } = getEventData();
+      const data = getEventData();
 
       document.getElementById("output").innerHTML = `
-        <span class="preview-subtitle">Event Summary</span>
-        <h3>${title}</h3>
+        <span class="preview-pill">Event Summary</span>
+        <h3>${data.title}</h3>
 
-        <div class="info-box">
-          <strong>Datum</strong>
-          ${date}
-        </div>
+        <div class="info-grid">
+          <div class="info-box">
+            <strong>Datum</strong>
+            ${data.date}
+          </div>
 
-        <div class="info-box">
-          <strong>Uhrzeit</strong>
-          ${time}${time !== "-" ? " Uhr" : ""}
-        </div>
+          <div class="info-box">
+            <strong>Uhrzeit</strong>
+            ${data.time}${data.time !== "-" ? " Uhr" : ""}
+          </div>
 
-        <div class="info-box">
-          <strong>Standort</strong>
-          ${location}
-          ${hasRealLocation ? `<br><a class="map-link" href="${mapsUrl}" target="_blank">In Google Maps öffnen</a>` : ""}
-        </div>
+          <div class="info-box full">
+            <strong>Standort</strong>
+            ${data.location}
+            ${data.hasRealLocation ? `<br><a class="map-link" href="${data.mapsUrl}" target="_blank">In Google Maps öffnen</a>` : ""}
+          </div>
 
-        <div class="info-box">
-          <strong>Teilnehmer</strong>
-          ${people}
-        </div>
+          <div class="info-box full">
+            <strong>Teilnehmer</strong>
+            ${data.people}
+          </div>
 
-        <div class="info-box">
-          <strong>Zusammenfassung</strong>
-          Am ${date} findet „${title}“ statt. 
-          Beginn ist um ${time}${time !== "-" ? " Uhr" : ""}. 
-          Der Treffpunkt ist ${location}. 
-          Wichtig: ${notes}
+          <div class="info-box full">
+            <strong>Zusammenfassung</strong>
+            Am ${data.date} findet „${data.title}“ statt. 
+            Beginn ist um ${data.time}${data.time !== "-" ? " Uhr" : ""}. 
+            Der Treffpunkt ist ${data.location}. 
+            Wichtig: ${data.notes}
+          </div>
         </div>
       `;
+
+      updateCountdown();
+      startCountdown();
+    }
+
+    function getEventDateTime() {
+      const { rawDate, rawTime } = getEventData();
+
+      if (!rawDate) return null;
+
+      const time = rawTime || "00:00";
+      return new Date(rawDate + "T" + time + ":00");
+    }
+
+    function updateCountdown() {
+      const countdown = document.getElementById("countdown");
+      const eventDate = getEventDateTime();
+
+      if (!eventDate) {
+        countdown.textContent = "Noch kein Datum";
+        return;
+      }
+
+      const now = new Date();
+      const diff = eventDate - now;
+
+      if (diff <= 0) {
+        countdown.textContent = "Event ist gestartet";
+        return;
+      }
+
+      const totalMinutes = Math.floor(diff / 1000 / 60);
+      const days = Math.floor(totalMinutes / 60 / 24);
+      const hours = Math.floor((totalMinutes - days * 24 * 60) / 60);
+      const minutes = totalMinutes % 60;
+
+      if (days > 0) {
+        countdown.textContent = `${days} Tage ${hours} Std.`;
+      } else if (hours > 0) {
+        countdown.textContent = `${hours} Std. ${minutes} Min.`;
+      } else {
+        countdown.textContent = `${minutes} Min.`;
+      }
+    }
+
+    function startCountdown() {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 60000);
     }
 
     function buildCopyText() {
-      const { title, date, time, location, people, notes, mapsUrl, hasRealLocation } = getEventData();
+      const data = getEventData();
 
       return `✨ EVENT ✨
 
-📌 Titel: ${title}
+📌 Titel: ${data.title}
 
-📅 Datum: ${date}
-⏰ Uhrzeit: ${time}${time !== "-" ? "" : ""}
+📅 Datum: ${data.date}
+⏰ Uhrzeit: ${data.time}
 
 📍 Ort:
-${location}
+${data.location}
 
-${hasRealLocation ? `🗺️ Google Maps:
-${mapsUrl}
+${data.hasRealLocation ? `🗺️ Google Maps:
+${data.mapsUrl}
 
 ` : ""}👥 Teilnehmer:
-${people}
+${data.people}
 
 📝 Infos:
-${notes}`;
+${data.notes}`;
     }
 
     function copyPretty() {
@@ -440,7 +726,8 @@ ${notes}`;
         "linear-gradient(135deg,#0f766e,#14b8a6)",
         "linear-gradient(135deg,#be123c,#f43f5e)",
         "linear-gradient(135deg,#92400e,#f59e0b)",
-        "linear-gradient(135deg,#1e3a8a,#2563eb)"
+        "linear-gradient(135deg,#1e3a8a,#2563eb)",
+        "linear-gradient(135deg,#0f172a,#334155)"
       ];
 
       let i = Number(output.dataset.i || 0);
@@ -456,12 +743,20 @@ ${notes}`;
 
     function resetForm() {
       document.querySelectorAll("input, textarea").forEach(e => e.value = "");
+
       document.getElementById("output").innerHTML = `
         <p class="empty-text">
           Fülle links die Daten aus und klicke auf „Erstellen“.<br>
           Danach erscheint hier deine schöne Event-Zusammenfassung.
         </p>
       `;
+
+      document.getElementById("countdown").textContent = "Noch kein Datum";
+
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
     }
 
     async function createCanvasFromOutput() {
@@ -472,18 +767,6 @@ ${notes}`;
         useCORS: true,
         backgroundColor: null
       });
-    }
-
-    async function downloadPNG() {
-      try {
-        const canvas = await createCanvasFromOutput();
-        const link = document.createElement("a");
-        link.download = "event-summary.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      } catch (error) {
-        alert("PNG konnte leider nicht erstellt werden.");
-      }
     }
 
     async function sharePNG() {
@@ -505,17 +788,73 @@ ${notes}`;
                 title: "Event Summary",
                 text: "Hier ist meine Event-Zusammenfassung"
               });
-            } catch (err) {
-              // User hat Share-Fenster evtl. geschlossen
-            }
+            } catch {}
           } else {
-            alert("Bild teilen wird auf diesem Gerät/Browser nicht unterstützt. Du kannst das PNG aber herunterladen.");
+            alert("Bild teilen wird auf diesem Gerät oder Browser nicht unterstützt.");
           }
         }, "image/png");
-      } catch (error) {
+      } catch {
         alert("Bild konnte nicht geteilt werden.");
       }
     }
+
+    function escapeICS(text) {
+      return String(text)
+        .replace(/\\/g, "\\\\")
+        .replace(/;/g, "\\;")
+        .replace(/,/g, "\\,")
+        .replace(/\n/g, "\\n");
+    }
+
+    function toICSDate(date) {
+      return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    }
+
+    function exportCalendar() {
+      const data = getEventData();
+
+      if (!data.rawDate) {
+        alert("Bitte gib zuerst ein Datum ein.");
+        return;
+      }
+
+      const startDate = getEventDateTime();
+      const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+
+      const description =
+        `Teilnehmer: ${data.people}\n` +
+        `Infos: ${data.notes}\n` +
+        `${data.hasRealLocation ? "Google Maps: " + data.mapsUrl : ""}`;
+
+      const icsContent =
+`BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//EventFlow//Event Planner//DE
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:${Date.now()}@eventflow
+DTSTAMP:${toICSDate(new Date())}
+DTSTART:${toICSDate(startDate)}
+DTEND:${toICSDate(endDate)}
+SUMMARY:${escapeICS(data.title)}
+LOCATION:${escapeICS(data.location)}
+DESCRIPTION:${escapeICS(description)}
+END:VEVENT
+END:VCALENDAR`;
+
+      const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${data.title.replace(/[^a-z0-9äöüß]/gi, "_").toLowerCase()}_event.ics`;
+      link.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("date").addEventListener("change", updateCountdown);
+    document.getElementById("time").addEventListener("change", updateCountdown);
   </script>
 </body>
 </html>
