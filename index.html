@@ -2,87 +2,109 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Event-Zusammenfassung</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EventFlow - Dein Event Planer</title>
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body { min-height: 100vh; background: linear-gradient(135deg, #eef2ff, #fdf2f8); padding: 30px; color: #222; }
-    .container { max-width: 1100px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-    .card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-    h1 { text-align: center; margin-bottom: 25px; color: #4f46e5; }
-    h2 { margin-bottom: 18px; }
-    label { display:block; margin-top:14px; margin-bottom:6px; font-weight:bold; }
-    input, textarea, select { width:100%; padding:12px; border:1px solid #ddd; border-radius:12px; }
-    textarea { min-height:90px; }
-    .buttons { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; }
-    button { border:none; border-radius:12px; padding:12px 16px; cursor:pointer; font-weight:bold; }
+    body {
+      font-family: Arial;
+      background: linear-gradient(135deg,#eef2ff,#fdf2f8);
+      padding: 30px;
+    }
+
+    h1 {
+      text-align:center;
+      color:#4f46e5;
+    }
+
+    .container {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      max-width:1000px;
+      margin:auto;
+    }
+
+    .card {
+      background:white;
+      padding:20px;
+      border-radius:15px;
+    }
+
+    input, textarea {
+      width:100%;
+      margin-top:10px;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid #ccc;
+    }
+
+    button {
+      margin-top:10px;
+      padding:10px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+    }
+
     .primary { background:#4f46e5; color:white; }
     .secondary { background:#eef2ff; color:#4f46e5; }
-    .danger { background:#fee2e2; color:#b91c1c; }
-    .event-output { border-radius:18px; padding:25px; background:linear-gradient(135deg,#4f46e5,#9333ea); color:white; min-height:360px; }
-    .info-box { background:rgba(255,255,255,0.15); padding:14px; border-radius:14px; margin-top:12px; }
-    .empty { opacity:0.8; }
+    .color { background:#fef3c7; }
+    .danger { background:#fee2e2; }
+
+    .event-output {
+      background: linear-gradient(135deg,#4f46e5,#9333ea);
+      color:white;
+      padding:20px;
+      border-radius:15px;
+    }
+
+    .info-box {
+      background:rgba(255,255,255,0.2);
+      padding:10px;
+      border-radius:10px;
+      margin-top:10px;
+    }
   </style>
 </head>
+
 <body>
-<h1>Event-Zusammenfassung Generator</h1>
+
+<h1>EventFlow – Dein schöner Event Planer</h1>
 
 <div class="container">
+
   <div class="card">
-    <h2>Event-Daten</h2>
+    <h2>Daten eingeben</h2>
 
-    <label>Titel</label>
-    <input id="title" type="text" />
+    <input id="title" placeholder="Titel"/>
+    <input id="date" type="date"/>
+    <input id="time" type="time"/>
+    <input id="location" placeholder="Ort"/>
+    <input id="people" placeholder="Teilnehmer"/>
+    <textarea id="notes" placeholder="Infos"></textarea>
 
-    <label>Art</label>
-    <select id="type">
-      <option>Meeting</option>
-      <option>Geburtstag</option>
-      <option>Feier</option>
-      <option>Sport</option>
-      <option>Sonstiges</option>
-    </select>
-
-    <label>Datum</label>
-    <input id="date" type="date" />
-
-    <label>Uhrzeit</label>
-    <input id="time" type="time" />
-
-    <label>Ort</label>
-    <input id="location" type="text" />
-
-    <label>Teilnehmer</label>
-    <input id="people" type="text" />
-
-    <label>Infos</label>
-    <textarea id="notes"></textarea>
-
-    <div class="buttons">
-      <button class="primary" onclick="generateSummary()">Erstellen</button>
-      <button class="secondary" onclick="copyPretty()">Schön kopieren</button>
-      <button class="danger" onclick="resetForm()">Reset</button>
-    </div>
+    <button class="primary" onclick="generate()">Erstellen</button>
+    <button class="secondary" onclick="copyPretty()">Copy Summary</button>
+    <button class="color" onclick="changeColor()">Farbe ändern</button>
+    <button class="danger" onclick="reset()">Reset</button>
   </div>
 
   <div class="card">
     <h2>Vorschau</h2>
-    <div id="output" class="event-output">
-      <p class="empty">Noch nichts erstellt</p>
-    </div>
+    <div id="output" class="event-output">Noch nichts erstellt</div>
   </div>
+
 </div>
 
 <script>
-function formatDate(dateValue){
-  if(!dateValue) return "Kein Datum";
-  const d = new Date(dateValue);
-  return d.toLocaleDateString("de-DE", { weekday:"long", day:"2-digit", month:"long"});
+function formatDate(d){
+  if(!d) return "-";
+  return new Date(d).toLocaleDateString("de-DE",{weekday:"long", day:"2-digit", month:"long"});
 }
 
-function generateSummary(){
+function generate(){
   const title = document.getElementById("title").value || "Event";
-  const type = document.getElementById("type").value;
   const date = formatDate(document.getElementById("date").value);
   const time = document.getElementById("time").value || "-";
   const location = document.getElementById("location").value || "-";
@@ -91,32 +113,100 @@ function generateSummary(){
 
   document.getElementById("output").innerHTML = `
     <h3>${title}</h3>
-    <div class="info-box">📅 ${date} <br> ⏰ ${time}</div>
-    <div class="info-box">📍 ${location}</div>
-    <div class="info-box">👥 ${people}</div>
-    <div class="info-box">📝 ${notes}</div>
+
+    <div class="info-box">
+      <strong>Datum</strong><br>${date}
+    </div>
+
+    <div class="info-box">
+      <strong>Uhrzeit</strong><br>${time}
+    </div>
+
+    <div class="info-box">
+      <strong>Ort</strong><br>${location}
+    </div>
+
+    <div class="info-box">
+      <strong>Teilnehmer</strong><br>${people}
+    </div>
+
+    <div class="info-box">
+      <strong>Zusammenfassung</strong><br>
+      Am ${date} findet „${title}“ statt. Beginn: ${time}. Ort: ${location}. Wichtig: ${notes}
+    </div>
   `;
 }
 
 function copyPretty(){
   const title = document.getElementById("title").value || "Event";
-  const type = document.getElementById("type").value;
   const date = formatDate(document.getElementById("date").value);
   const time = document.getElementById("time").value || "-";
   const location = document.getElementById("location").value || "-";
   const people = document.getElementById("people").value || "-";
   const notes = document.getElementById("notes").value || "-";
 
-  const text = `✨ EVENT ✨\n\n📌 Titel: ${title}\n\n🏷️ Art: ${type}\n\n📅 Datum: ${date}\n⏰ Uhrzeit: ${time}\n\n📍 Ort:\n${location}\n\n👥 Teilnehmer:\n${people}\n\n📝 Infos:\n${notes}`;
+  const text = `✨ EVENT ✨
 
-  navigator.clipboard.writeText(text);
-  alert("Schön formatiert kopiert!");
+📌 Titel: ${title}
+
+📅 Datum: ${date}
+⏰ Uhrzeit: ${time}
+
+📍 Ort:
+${location}
+
+👥 Teilnehmer:
+${people}
+
+📝 Infos:
+${notes}`;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      .then(() => alert("Kopiert!"))
+      .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
 }
 
-function resetForm(){
-  document.querySelectorAll("input, textarea").forEach(el=>el.value="");
-  document.getElementById("output").innerHTML = '<p class="empty">Noch nichts erstellt</p>';
+function fallbackCopy(text){
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    document.execCommand("copy");
+    alert("Kopiert!");
+  } catch {
+    alert("Fehler beim Kopieren");
+  }
+
+  document.body.removeChild(textarea);
+}
+
+function changeColor(){
+  const output = document.getElementById("output");
+  const colors = [
+    "linear-gradient(135deg,#4f46e5,#9333ea)",
+    "linear-gradient(135deg,#0f766e,#14b8a6)",
+    "linear-gradient(135deg,#be123c,#f43f5e)",
+    "linear-gradient(135deg,#92400e,#f59e0b)"
+  ];
+
+  let i = Number(output.dataset.i || 0);
+  i = (i+1) % colors.length;
+
+  output.style.background = colors[i];
+  output.dataset.i = i;
+}
+
+function reset(){
+  document.querySelectorAll("input, textarea").forEach(e=>e.value="");
+  document.getElementById("output").innerHTML="Noch nichts erstellt";
 }
 </script>
+
 </body>
 </html>
