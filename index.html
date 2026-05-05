@@ -15,6 +15,13 @@
       --soft-border: rgba(148, 163, 184, 0.18);
     }
 
+    html,
+    body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -64,6 +71,7 @@
       grid-template-columns: 0.95fr 1.05fr;
       gap: 22px;
       align-items: start;
+      width: 100%;
     }
 
     .card {
@@ -73,6 +81,9 @@
       border-radius: 28px;
       padding: 24px;
       box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      width: 100%;
+      min-width: 0;
     }
 
     h2 {
@@ -83,6 +94,13 @@
     .form-grid {
       display: grid;
       gap: 12px;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .field {
+      width: 100%;
+      min-width: 0;
     }
 
     .field label {
@@ -93,19 +111,24 @@
       color: #e2e8f0;
     }
 
-    input, textarea {
+    input,
+    textarea {
       width: 100%;
+      max-width: 100%;
+      min-width: 0;
       padding: 13px 14px;
       border-radius: 16px;
       border: 1px solid #334155;
-      font-size: 15px;
+      font-size: 16px;
       outline: none;
       background: #020617;
       color: white;
       transition: 0.2s ease;
+      display: block;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
     }
@@ -117,8 +140,10 @@
 
     .two-cols {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 12px;
+      width: 100%;
+      min-width: 0;
     }
 
     .buttons {
@@ -217,6 +242,8 @@
       transition: 0.3s ease;
       position: relative;
       overflow: hidden;
+      width: 100%;
+      min-width: 0;
     }
 
     .event-output:before {
@@ -250,12 +277,15 @@
       font-size: 34px;
       line-height: 1.1;
       letter-spacing: -0.5px;
+      word-break: break-word;
     }
 
     .info-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 10px;
+      width: 100%;
+      min-width: 0;
     }
 
     .info-box {
@@ -265,6 +295,7 @@
       border-radius: 16px;
       line-height: 1.45;
       word-break: break-word;
+      min-width: 0;
     }
 
     .info-box.full {
@@ -284,6 +315,7 @@
       color: white;
       font-weight: 900;
       text-decoration: underline;
+      word-break: break-word;
     }
 
     .empty-text {
@@ -302,6 +334,7 @@
     .saved-section {
       max-width: 1120px;
       margin: 22px auto 0 auto;
+      width: 100%;
     }
 
     .saved-header {
@@ -314,8 +347,9 @@
 
     .saved-list {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
+      width: 100%;
     }
 
     .saved-event {
@@ -325,6 +359,8 @@
       padding: 16px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
       transition: 0.2s ease;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .saved-event:hover {
@@ -335,6 +371,7 @@
       margin: 0 0 8px 0;
       font-size: 18px;
       color: #e0e7ff;
+      word-break: break-word;
     }
 
     .saved-meta {
@@ -342,6 +379,7 @@
       color: #cbd5e1;
       line-height: 1.5;
       margin-bottom: 12px;
+      word-break: break-word;
     }
 
     .saved-actions {
@@ -383,7 +421,15 @@
 
     @media (max-width: 560px) {
       body {
-        padding: 16px;
+        padding: 14px;
+      }
+
+      .app-header {
+        margin-bottom: 18px;
+      }
+
+      .subtitle {
+        font-size: 15px;
       }
 
       .container,
@@ -394,31 +440,66 @@
       }
 
       .two-cols {
-        display: flex;
-        flex-direction: column;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
         gap: 12px;
-        width: 100%;
-      }
-
-      .field {
-        width: 100%;
-        min-width: 0;
-      }
-
-      input,
-      textarea {
         width: 100%;
         max-width: 100%;
         min-width: 0;
       }
 
+      .card,
+      .container,
+      .form-grid,
+      .two-cols,
+      .field {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+      }
+
       .card {
-        padding: 18px;
+        padding: 16px;
         border-radius: 22px;
+      }
+
+      input,
+      textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        font-size: 16px;
+      }
+
+      input[type="date"],
+      input[type="time"] {
+        display: block;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box;
+        appearance: none;
+        -webkit-appearance: none;
+        padding: 12px;
+        font-size: 16px;
+      }
+
+      input[type="date"]::-webkit-date-and-time-value,
+      input[type="time"]::-webkit-date-and-time-value {
+        text-align: left;
+        width: 100%;
+      }
+
+      input[type="date"]::-webkit-calendar-picker-indicator,
+      input[type="time"]::-webkit-calendar-picker-indicator {
+        max-width: 20px;
+        margin-left: 4px;
       }
 
       .event-output {
         padding: 20px;
+        min-height: 330px;
       }
 
       .event-output h3 {
