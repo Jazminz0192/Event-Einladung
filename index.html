@@ -198,6 +198,11 @@
       color: #4f46e5;
     }
 
+    .save-btn {
+      background: #f0fdf4;
+      color: #15803d;
+    }
+
     .share-btn {
       background: #dcfce7;
       color: #166534;
@@ -398,6 +403,86 @@
       color: #cbd5e1;
     }
 
+    .saved-section {
+      max-width: 1120px;
+      margin: 22px auto 0 auto;
+    }
+
+    .saved-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .saved-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .saved-event {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--soft-border);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+      transition: 0.2s ease;
+    }
+
+    .saved-event:hover {
+      transform: translateY(-2px);
+    }
+
+    body.dark .saved-event {
+      background: rgba(15, 23, 42, 0.82);
+      border-color: rgba(148, 163, 184, 0.18);
+    }
+
+    .saved-event h3 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      color: #312e81;
+    }
+
+    body.dark .saved-event h3 {
+      color: #e0e7ff;
+    }
+
+    .saved-meta {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    body.dark .saved-meta {
+      color: #cbd5e1;
+    }
+
+    .saved-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      padding: 9px 11px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    .empty-saved {
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    body.dark .empty-saved {
+      color: #cbd5e1;
+    }
+
     @media (max-width: 920px) {
       .container {
         grid-template-columns: 1fr;
@@ -411,6 +496,10 @@
       .countdown-box {
         width: 100%;
       }
+
+      .saved-list {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     @media (max-width: 560px) {
@@ -419,7 +508,8 @@
       }
 
       .two-cols,
-      .info-grid {
+      .info-grid,
+      .saved-list {
         grid-template-columns: 1fr;
       }
 
@@ -435,6 +525,15 @@
         width: 100%;
         justify-content: space-between;
       }
+
+      .saved-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .saved-actions {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -443,7 +542,7 @@
   <header class="app-header">
     <div class="badge">Smart Event Summary</div>
     <h1>EventFlow</h1>
-    <p class="subtitle">Erstelle schöne Event-Zusammenfassungen, teile sie als Text oder Bild und exportiere sie direkt in deinen Kalender.</p>
+    <p class="subtitle">Erstelle schöne Event-Zusammenfassungen, speichere Events lokal und exportiere sie direkt in deinen Kalender.</p>
   </header>
 
   <main class="container">
@@ -486,6 +585,7 @@
 
       <div class="buttons">
         <button class="primary" onclick="generate()">Erstellen</button>
+        <button class="save-btn" onclick="saveEvent()">Event speichern</button>
         <button class="secondary" onclick="copyPretty()">Copy Summary</button>
         <button class="calendar-btn" onclick="exportCalendar()">Kalender Export</button>
         <button class="share-btn" onclick="sharePNG()">Bild teilen</button>
@@ -502,7 +602,7 @@
       </div>
 
       <p class="hint">
-        Tipp: Der Kalender-Export erstellt eine .ics-Datei. Diese kannst du öffnen und zu Google Kalender, Apple Kalender oder Outlook hinzufügen.
+        Deine gespeicherten Events bleiben lokal in diesem Browser gespeichert. Wenn du den Browser wechselst oder Browserdaten löschst, sind sie weg.
       </p>
     </section>
 
@@ -525,10 +625,22 @@
     </section>
   </main>
 
+  <section class="saved-section card">
+    <div class="saved-header">
+      <h2>Gespeicherte Events</h2>
+      <button class="danger small-btn" onclick="deleteAllEvents()">Alle löschen</button>
+    </div>
+
+    <div id="savedList" class="saved-list">
+      <p class="empty-saved">Noch keine Events gespeichert.</p>
+    </div>
+  </section>
+
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
   <script>
     let countdownInterval = null;
+    let editingEventId = null;
 
     function formatDate(d) {
       if (!d) return "-";
@@ -557,6 +669,7 @@
         : "";
 
       return {
+        id: editingEventId || Date.now(),
         title,
         rawDate,
         rawTime,
@@ -568,6 +681,17 @@
         mapsUrl,
         hasRealLocation
       };
+    }
+
+    function setFormData(eventData) {
+      document.getElementById("title").value = eventData.title || "";
+      document.getElementById("date").value = eventData.rawDate || "";
+      document.getElementById("time").value = eventData.rawTime || "";
+      document.getElementById("location").value = eventData.location === "-" ? "" : eventData.location || "";
+      document.getElementById("people").value = eventData.people === "-" ? "" : eventData.people || "";
+      document.getElementById("notes").value = eventData.notes === "-" ? "" : eventData.notes || "";
+
+      editingEventId = eventData.id || null;
     }
 
     function generate() {
@@ -744,6 +868,8 @@ ${data.notes}`;
     function resetForm() {
       document.querySelectorAll("input, textarea").forEach(e => e.value = "");
 
+      editingEventId = null;
+
       document.getElementById("output").innerHTML = `
         <p class="empty-text">
           Fülle links die Daten aus und klicke auf „Erstellen“.<br>
@@ -853,8 +979,138 @@ END:VCALENDAR`;
       URL.revokeObjectURL(url);
     }
 
+    function getSavedEvents() {
+      return JSON.parse(localStorage.getItem("eventflow_events")) || [];
+    }
+
+    function setSavedEvents(events) {
+      localStorage.setItem("eventflow_events", JSON.stringify(events));
+    }
+
+    function saveEvent() {
+      const data = getEventData();
+
+      if (!data.title || data.title === "Event") {
+        alert("Bitte gib zuerst einen Titel ein.");
+        return;
+      }
+
+      if (!data.rawDate) {
+        alert("Bitte gib zuerst ein Datum ein.");
+        return;
+      }
+
+      const events = getSavedEvents();
+      const existingIndex = events.findIndex(event => event.id === data.id);
+
+      if (existingIndex >= 0) {
+        events[existingIndex] = data;
+        alert("Event wurde aktualisiert!");
+      } else {
+        events.push(data);
+        alert("Event wurde gespeichert!");
+      }
+
+      setSavedEvents(events);
+      editingEventId = data.id;
+      renderSavedEvents();
+      generate();
+    }
+
+    function renderSavedEvents() {
+      const savedList = document.getElementById("savedList");
+      const events = getSavedEvents();
+
+      if (events.length === 0) {
+        savedList.innerHTML = `<p class="empty-saved">Noch keine Events gespeichert.</p>`;
+        return;
+      }
+
+      const sortedEvents = events.sort((a, b) => {
+        const dateA = new Date((a.rawDate || "9999-12-31") + "T" + (a.rawTime || "00:00"));
+        const dateB = new Date((b.rawDate || "9999-12-31") + "T" + (b.rawTime || "00:00"));
+        return dateA - dateB;
+      });
+
+      savedList.innerHTML = sortedEvents.map(event => `
+        <div class="saved-event">
+          <h3>${event.title}</h3>
+
+          <div class="saved-meta">
+            <strong>Datum:</strong> ${formatDate(event.rawDate)}<br>
+            <strong>Uhrzeit:</strong> ${event.rawTime || "-"}${event.rawTime ? " Uhr" : ""}<br>
+            <strong>Ort:</strong> ${event.location || "-"}
+          </div>
+
+          <div class="saved-actions">
+            <button class="secondary small-btn" onclick="loadEvent(${event.id})">Bearbeiten</button>
+            <button class="calendar-btn small-btn" onclick="exportSavedCalendar(${event.id})">Kalender</button>
+            <button class="danger small-btn" onclick="deleteEvent(${event.id})">Löschen</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function loadEvent(id) {
+      const events = getSavedEvents();
+      const eventData = events.find(event => event.id === id);
+
+      if (!eventData) {
+        alert("Event wurde nicht gefunden.");
+        return;
+      }
+
+      setFormData(eventData);
+      generate();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function deleteEvent(id) {
+      const confirmDelete = confirm("Möchtest du dieses Event wirklich löschen?");
+
+      if (!confirmDelete) return;
+
+      const events = getSavedEvents().filter(event => event.id !== id);
+      setSavedEvents(events);
+
+      if (editingEventId === id) {
+        resetForm();
+      }
+
+      renderSavedEvents();
+    }
+
+    function deleteAllEvents() {
+      const confirmDelete = confirm("Möchtest du wirklich alle gespeicherten Events löschen?");
+
+      if (!confirmDelete) return;
+
+      localStorage.removeItem("eventflow_events");
+      editingEventId = null;
+      renderSavedEvents();
+    }
+
+    function exportSavedCalendar(id) {
+      const events = getSavedEvents();
+      const eventData = events.find(event => event.id === id);
+
+      if (!eventData) {
+        alert("Event wurde nicht gefunden.");
+        return;
+      }
+
+      setFormData(eventData);
+      exportCalendar();
+    }
+
     document.getElementById("date").addEventListener("change", updateCountdown);
     document.getElementById("time").addEventListener("change", updateCountdown);
+
+    renderSavedEvents();
   </script>
 </body>
 </html>
